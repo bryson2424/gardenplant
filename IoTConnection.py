@@ -7,6 +7,7 @@ from PIL import Image
 import firebaseStorage
 from datetime import datetime
 
+
 class IoTConnection():
     """Helps facilitate a connection to Adafruit IO for uploading data
     """
