@@ -1,11 +1,14 @@
 from Camera import Camera
 from SensorUARTData import Sensor
+from ColorSensor import ColorSensor
+from ColorSensorManager import ColorSensorManager
 import cv2
 
 class Main:
     def __init__(self):
         self.plantList = []
         self.cameraList = []
+        self.colorSensorMan = ColorSensorManager
 
     def setupCameras(self):
         cameraIndices = self.__getAllCameraIndices()
@@ -13,7 +16,16 @@ class Main:
         for cameraIndex in cameraIndices:
             self.cameraList.append(Camera(cameraIndex))
 
+    def setupColorSensors(self):
+        leftSensor = ColorSensor(location="left")
+        middleSensor = ColorSensor(extended=True, extendedI2CValue=3, location="middle")
+        rightSensor = ColorSensor(extended=True, extendedI2CValue=4, location="right")
 
+        self.colorSensorMan.addColorSensor(leftSensor)
+        self.colorSensorMan.addColorSensor(middleSensor)
+        self.colorSensorMan.addColorSensor(rightSensor)
+
+        print(self.colorSensorMan.getColorData())
 
     def __getAllCameraIndices(self):
         # checks the first 10 indexes.
@@ -60,4 +72,8 @@ sensor = Sensor("COM3")
 data = sensor.getSerialData()
 
 print(data)
+
+
+
+
 
