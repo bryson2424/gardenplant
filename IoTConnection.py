@@ -4,6 +4,8 @@ from Adafruit_IO import Client, MQTTClient, Feed
 import base64
 from io import BytesIO
 from PIL import Image
+import firebaseStorage
+from datetime import datetime
 
 class IoTConnection():
     """Helps facilitate a connection to Adafruit IO for uploading data
@@ -34,7 +36,7 @@ class IoTConnection():
             self.client.create_feed(moistureFeed)
 
     def uploadData(self, plant, data):
-        """Upload a dictionary of plant data to Adafruit IO
+        """Upload a dictionary of plant data to Adafruit IO and Firebase Storage
 
         :param plant:
         :param data:
@@ -45,6 +47,15 @@ class IoTConnection():
 
         if len(data["base64Image"]) > 102400:
             print("WARNING: Image resolution too large to upload to Adafruit IO")
+        else:
+            # Safely upload image to firebase
+            now = datetime.now()
+
+            current_time = now.strftime("%m_%d_%y-%H_%M_%S")
+
+            img = Image.open(BytesIO(base64.b64decode(data["base64Image"])))
+            img.save("{}_{}.png".format(plant.name,current_time), format="PNG", optimize=True, quality=85)
+            firebaseStorage.uploadImageToFirebaes("{}_{}.png".format(plant.name, current_time))
 
         self.mqttClient.publish(plant.imageKey, data["base64Image"])
         self.client.send(plant.tempKey, data["temp"])

@@ -73,7 +73,7 @@ m = Main()
 
 #print(data)
 
-m.setupColorSensors()
+#m.setupColorSensors()
 
 
 
