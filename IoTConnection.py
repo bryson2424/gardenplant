@@ -43,6 +43,9 @@ class IoTConnection():
         """
         print(plant.imageKey, plant.tempKey, plant.moistureKey)
 
+        if len(data["base64Image"]) > 102400:
+            print("WARNING: Image resolution too large to upload to Adafruit IO")
+
         self.mqttClient.publish(plant.imageKey, data["base64Image"])
         self.client.send(plant.tempKey, data["temp"])
         self.client.send(plant.moistureKey, data["moisture"])
@@ -56,11 +59,12 @@ class IoTConnection():
         """
         img = Image.open(fileName)
         im_file = BytesIO()
-        img.save(im_file, format=fileType)
+        img = img.resize((300,225), Image.LANCZOS)
+        img.save(im_file, format=fileType, optimize=True, quality=85)
         im_bytes = im_file.getvalue()
         im_b64 = base64.b64encode(im_bytes)
-        return im_b64
 
+        return im_b64
 
     def __feedExists(self, feedName):
         feedNames = []
@@ -83,7 +87,7 @@ p = Plant("mob")
 conn.createFeed(p)
 
 
-im_b64 = conn.convertImageFileToBase64("test.png")
+im_b64 = conn.convertImageFileToBase64("Street_Pic.jpg", fileType="JPEG")
 
 data = {"base64Image": im_b64, "temp": 74, "moisture": 500}
 
