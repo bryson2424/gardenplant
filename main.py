@@ -2,13 +2,13 @@ from Camera import Camera
 from SensorUARTData import Sensor
 from ColorSensor import ColorSensor
 from ColorSensorManager import ColorSensorManager
-import cv2
+#import cv2
 
 class Main:
     def __init__(self):
         self.plantList = []
         self.cameraList = []
-        self.colorSensorMan = ColorSensorManager
+        self.colorSensorMan = ColorSensorManager()
 
     def setupCameras(self):
         cameraIndices = self.__getAllCameraIndices()
@@ -64,16 +64,16 @@ def findPlant():
 m = Main()
 #m.setupCameras()
 
-print(m.cameraList)
+#print(m.cameraList)
 
 
-sensor = Sensor("COM3")
+#sensor = Sensor("COM3")
 
-data = sensor.getSerialData()
+#data = sensor.getSerialData()
 
-print(data)
+#print(data)
 
-
+m.setupColorSensors()
 
 
 
