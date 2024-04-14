@@ -3,6 +3,8 @@ from SensorUARTData import Sensor
 from ColorSensor import ColorSensor
 from ColorSensorManager import ColorSensorManager
 from Robot import Robot
+from IoTConnection import IoTConnection
+from Plant import Plant
 #import cv2
 
 class Main:
@@ -11,6 +13,11 @@ class Main:
         self.cameraList = []
         self.colorSensorMan = ColorSensorManager()
         self.robot = None
+
+        self.sensor = Sensor("/dev/ttyACM0")
+
+        self.IoTConn = IoTConnection()
+
 
     def setupCameras(self):
         cameraIndices = self.__getAllCameraIndices()
@@ -48,6 +55,25 @@ class Main:
             if color == "blue":
                 print("Blue found")
                 self.robot.stop()
+                self.collectData()
+
+    def collectData(self):
+        self.robot.insertSoilSensor()
+
+        sensorData = self.sensor.getSerialData()
+
+        for camera in self.cameraList:
+            # Only grabs from one camera atm
+            im_b64 = camera.baes64Image
+
+        # Doesn't identify plants atm
+        # identifyPlant
+        plant = Plant(name="Plant0")
+        self.IoTConn.createFeed(plant)
+
+        data = {"base64Image": im_b64, "temp": sensorData["bmpTemp"], "moisture": "soilMoisture"}
+
+        self.IoTConn.uploadData(plant, data)
 
 
     def __getAllCameraIndices(self):
@@ -89,10 +115,6 @@ m = Main()
 
 #print(m.cameraList)
 
-
-sensor = Sensor("/dev/ttyACM0")
-
-data = sensor.getSerialData()
 
 #print(data)
 

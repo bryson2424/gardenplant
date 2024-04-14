@@ -47,3 +47,6 @@ class Robot:
     def stop(self):
         # Stop all movement
         pass
+
+    def insertSoilSensor(self):
+        pass
