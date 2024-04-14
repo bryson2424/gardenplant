@@ -6,7 +6,7 @@ import time
 # RPi and Motor Pre-allocations
 ################################
 #
-#define GPIO pins
+#define GPIO pins   left motor
 direction= 0 # Direction (DIR) GPIO Pin
 step = 5 # Step GPIO Pin
 EN_pin = 6 # enable pin (LOW to enable)
