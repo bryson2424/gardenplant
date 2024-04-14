@@ -5,7 +5,7 @@ from ColorSensorManager import ColorSensorManager
 from Robot import Robot
 from IoTConnection import IoTConnection
 from Plant import Plant
-#import cv2
+import cv2
 
 class Main:
     def __init__(self):
@@ -74,7 +74,6 @@ class Main:
         data = {"base64Image": im_b64, "temp": sensorData["bmpTemp"], "moisture": "soilMoisture"}
 
         self.IoTConn.uploadData(plant, data)
-
 
     def __getAllCameraIndices(self):
         # checks the first 10 indexes.
