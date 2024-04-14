@@ -67,13 +67,12 @@ m = Main()
 #print(m.cameraList)
 
 
-#sensor = Sensor("COM3")
+sensor = Sensor("/dev/ttyACM0")
 
-#data = sensor.getSerialData()
+data = sensor.getSerialData()
 
 #print(data)
 
-#m.setupColorSensors()
-
+m.setupColorSensors()
 
 

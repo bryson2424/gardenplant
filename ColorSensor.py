@@ -10,6 +10,7 @@ class ColorSensor:
             self.i2c = I2C(extendedI2CValue)
         else:
             self.i2c = board.I2C()
+            print(self.i2c)
 
         self.sensor = adafruit_tcs34725.TCS34725(self.i2c)
 

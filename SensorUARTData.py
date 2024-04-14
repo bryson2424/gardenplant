@@ -41,7 +41,7 @@ class Sensor:
                 """
                 count += 1
 
-            if count == 5:
+            if count >= 5:
                 print("Done!")
                 return {
                     "bmpPressure": sum(bmpPressureData)/(len(bmpPressureData)),
@@ -49,5 +49,3 @@ class Sensor:
                     "soilTemp": sum(soilTempData) / (len(soilTempData)),
                     "soilMoisture": sum(soilMoistureData) / (len(soilMoistureData))
                 }
-
-
