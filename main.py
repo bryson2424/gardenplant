@@ -1,7 +1,8 @@
-from Camera import Camera
+from Camera import camThread
 from SensorUARTData import Sensor
 from ColorSensor import ColorSensor
 from ColorSensorManager import ColorSensorManager
+from Robot import Robot
 #import cv2
 
 class Main:
@@ -9,12 +10,13 @@ class Main:
         self.plantList = []
         self.cameraList = []
         self.colorSensorMan = ColorSensorManager()
+        self.robot = None
 
     def setupCameras(self):
         cameraIndices = self.__getAllCameraIndices()
 
         for cameraIndex in cameraIndices:
-            self.cameraList.append(Camera(cameraIndex))
+            self.cameraList.append(camThread(camID=cameraIndex))
 
     def setupColorSensors(self):
         leftSensor = ColorSensor(location="left")
@@ -26,6 +28,27 @@ class Main:
         self.colorSensorMan.addColorSensor(rightSensor)
 
         print(self.colorSensorMan.getColorData())
+
+    def setupRobot(self):
+        self.robot = Robot(self.colorSensorMan)
+
+    def followUntilPointOfInterest(self):
+        POIfound, color = self.robot.followLine()
+
+        if POIfound:
+            if color == "red":
+                print("Red found")
+                self.robot.turnLeft(90)
+                self.followUntilPlantReached()
+
+    def followUntilPlantReached(self):
+        POIfound, color = self.robot.followLine()
+
+        if POIfound:
+            if color == "blue":
+                print("Blue found")
+                self.robot.stop()
+
 
     def __getAllCameraIndices(self):
         # checks the first 10 indexes.
